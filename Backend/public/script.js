@@ -1,3 +1,4 @@
+const API_URL = 'https://yt-downloader-rz8n.onrender.com';
 const urlInput = document.getElementById('video-url');
 const fetchBtn = document.getElementById('fetch-btn');
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -86,7 +87,7 @@ const fetchVideoInfo = async () => {
     formatsContainer.innerHTML = '';
 
     try {
-        const response = await fetch(`https://yt-downloader-rz8n.onrender.com/video-info?url=${encodeURIComponent(url)}`);
+        const response = await fetch(`${API_URL}/video-info?url=${encodeURIComponent(url)}`);
         const data = await response.json();
 
         if (data.success) {
@@ -136,7 +137,7 @@ const fetchVideoInfo = async () => {
         }
     } catch (error) {
         hideLoader();
-        showError('Network error. Please ensure the server is running on port 5000.');
+        showError('Network error. Please ensure the server is running.');
         console.error('Fetch Error:', error);
     }
 };

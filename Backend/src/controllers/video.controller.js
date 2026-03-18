@@ -1,22 +1,13 @@
-const express = require('express');
-const cors = require('cors');
+const { Innertube, Platform } = require('youtubei.js');
 const { Readable } = require('stream');
-
-const app = express();
-const PORT = 5000;
-
-app.use(cors());
-app.use(express.json());
-app.use(express.static('./public'));
 
 let yt = null;
 
-// create innertube once
 async function getYT() {
     if (!yt) {
-        const { Innertube, Platform } = await import('youtubei.js');
+        const { Innertube: tube, Platform: plat } = await import('youtubei.js');
 
-        Platform.shim.eval = async (data, env) => {
+        plat.shim.eval = async (data, env) => {
             const code = `${data.output}
             return {
                 n: exportedVars.nFunction?.("${env.n || ''}"),
@@ -25,12 +16,11 @@ async function getYT() {
             return new Function(code)();
         };
 
-        yt = await Innertube.create();
+        yt = await tube.create();
     }
     return yt;
 }
 
-// simple validation
 function getId(url) {
     try {
         const u = new URL(url);
@@ -42,8 +32,7 @@ function getId(url) {
     }
 }
 
-// VIDEO INFO
-app.get('/video-info', async (req, res) => {
+exports.getVideoInfo = async (req, res) => {
     const id = getId(req.query.url);
     if (!id) return res.status(400).json({ success: false, error: 'Invalid URL' });
 
@@ -72,10 +61,9 @@ app.get('/video-info', async (req, res) => {
     } catch (e) {
         res.status(500).json({ success: false, error: 'Cannot fetch video info' });
     }
-});
+};
 
-// DOWNLOAD
-app.get('/download', async (req, res) => {
+exports.downloadVideo = async (req, res) => {
     const id = getId(req.query.url);
     const itag = parseInt(req.query.itag);
 
@@ -97,8 +85,4 @@ app.get('/download', async (req, res) => {
     } catch (e) {
         res.status(500).send('Download error');
     }
-});
-
-app.listen(PORT, () =>
-    console.log(`Server running → http://localhost:${PORT}`)
-);
+};

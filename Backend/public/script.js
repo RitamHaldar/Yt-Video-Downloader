@@ -1,6 +1,5 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = window.location.origin;
 
-// DOM Elements
 const urlInput = document.getElementById('video-url');
 const fetchBtn = document.getElementById('fetch-btn');
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -15,7 +14,6 @@ const progressContainer = document.getElementById('download-progress');
 const progressFill = document.getElementById('progress-fill');
 const progressText = document.getElementById('progress-text');
 
-// Theme Logic
 const initTheme = () => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'dark') {
@@ -40,14 +38,11 @@ themeToggleBtn.addEventListener('click', () => {
     }
 });
 
-// Initialization
 initTheme();
 
-// UI Utility Functions
 const showError = (msg) => {
     errorText.textContent = msg;
     errorMessage.classList.remove('hidden');
-    // Scroll to error if needed
     errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 };
 
@@ -65,17 +60,16 @@ const hideLoader = () => {
     loader.classList.add('hidden');
 };
 
-// Download Progress Simulation
 const simulateDownload = () => {
     progressContainer.classList.remove('hidden');
     progressFill.style.width = '0%';
     progressText.textContent = '0%';
-    
+
     let progress = 0;
     const interval = setInterval(() => {
         progress += Math.floor(Math.random() * 5) + 2;
         if (progress > 98) progress = 98; // Stay at 98% until download starts
-        
+
         progressFill.style.width = `${progress}%`;
         progressText.textContent = `${progress}%`;
     }, 150);
@@ -83,7 +77,6 @@ const simulateDownload = () => {
     return () => clearInterval(interval);
 };
 
-// Core Functionality: Fetch Video Info
 const fetchVideoInfo = async () => {
     const url = urlInput.value.trim();
     if (!url) {
@@ -93,17 +86,15 @@ const fetchVideoInfo = async () => {
 
     showLoader();
     formatsContainer.innerHTML = '';
-    
+
     try {
         const response = await fetch(`${API_URL}/video-info?url=${encodeURIComponent(url)}`);
         const data = await response.json();
 
         if (data.success) {
-            // Update UI with video details
             thumbnailImg.src = data.thumbnail;
             videoTitle.textContent = data.title;
-            
-            // Create format buttons with new premium style
+
             if (!data.formats || data.formats.length === 0) {
                 showError('No high-quality mp4 formats found for this video.');
                 hideLoader();
@@ -116,15 +107,13 @@ const fetchVideoInfo = async () => {
                         <span>${format.quality}</span>
                         <span style="font-size: 0.75rem; color: var(--text-secondary)">MP4</span>
                     `;
-                    
+
                     btn.addEventListener('click', () => {
                         const stopSimulation = simulateDownload();
-                        
-                        // Small delay to show progress starting before redirection
+
                         setTimeout(() => {
                             window.location.href = `${API_URL}/download?url=${encodeURIComponent(url)}&itag=${format.itag}`;
-                            
-                            // Finish progress after a bit (since redirection happens)
+
                             setTimeout(() => {
                                 progressFill.style.width = '100%';
                                 progressText.textContent = '100%';
@@ -135,13 +124,12 @@ const fetchVideoInfo = async () => {
                             }, 500);
                         }, 300);
                     });
-                    
+
                     formatsContainer.appendChild(btn);
                 });
-                
+
                 hideLoader();
                 videoPreview.classList.remove('hidden');
-                // Smooth scroll to preview
                 videoPreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         } else {
@@ -155,7 +143,6 @@ const fetchVideoInfo = async () => {
     }
 };
 
-// Event Listeners
 fetchBtn.addEventListener('click', fetchVideoInfo);
 
 urlInput.addEventListener('keypress', (e) => {
@@ -164,7 +151,6 @@ urlInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Auto-fetch on paste for better UX
 urlInput.addEventListener('paste', () => {
     setTimeout(() => {
         if (urlInput.value.includes('youtube.com') || urlInput.value.includes('youtu.be')) {

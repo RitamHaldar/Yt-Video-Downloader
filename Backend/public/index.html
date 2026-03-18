@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube Downloader</title>
+    <meta name="description" content="Download YouTube videos in high quality with a sleek, modern interface.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon"><i class="fab fa-youtube"></i></span>
+                <span class="logo-text">Youtube<span>Downloader</span></span>
+            </div>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <section class="hero-section">
+            <h1 class="hero-title">Download you tube videos for free</h1>
+            <p class="hero-subtitle">Paste your YouTube link below and experience high-speed, high-quality downloads in
+                a beautiful interface.</p>
+
+            <div class="input-group-container">
+                <div class="input-wrapper">
+                    <i class="fas fa-link input-icon"></i>
+                    <input type="text" id="video-url" placeholder="https://www.youtube.com/watch?v=..."
+                        spellcheck="false">
+                </div>
+                <button id="fetch-btn" class="primary-btn">
+                    <span>Fetch Video</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div id="error-message" class="error-card hidden">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-text">Something went wrong. Please check your URL.</span>
+            </div>
+        </section>
+
+        <section id="results-section" class="results-section">
+            <div id="loader" class="loader-container hidden">
+                <div class="shimmer-card"></div>
+                <div class="loading-spinner"></div>
+                <p>Analyzing video streams...</p>
+            </div>
+
+            <div id="video-preview" class="video-preview-card hidden">
+                <div class="preview-layout">
+                    <div class="thumbnail-container">
+                        <img id="thumbnail" src="" alt="Video Thumbnail" loading="lazy">
+                        <div class="thumbnail-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+
+                    <div class="video-details">
+                        <h2 id="video-title">Video Title</h2>
+                        <p class="video-meta"><i class="fab fa-youtube"></i> YouTube Video</p>
+
+                        <div class="format-selection">
+                            <h3>Choose Format</h3>
+                            <div id="formats-container" class="formats-grid">
+                            </div>
+                        </div>
+
+                        <div id="download-progress" class="progress-container hidden">
+                            <div class="progress-info">
+                                <span>Preparing your download...</span>
+                                <span id="progress-text">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="progress-fill" class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

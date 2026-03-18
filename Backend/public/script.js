@@ -1,5 +1,3 @@
-const API_URL = window.location.origin;
-
 const urlInput = document.getElementById('video-url');
 const fetchBtn = document.getElementById('fetch-btn');
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -88,7 +86,7 @@ const fetchVideoInfo = async () => {
     formatsContainer.innerHTML = '';
 
     try {
-        const response = await fetch(`${API_URL}/video-info?url=${encodeURIComponent(url)}`);
+        const response = await fetch(`https://yt-downloader-rz8n.onrender.com/video-info?url=${encodeURIComponent(url)}`);
         const data = await response.json();
 
         if (data.success) {
